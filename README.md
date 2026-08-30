@@ -1,0 +1,1 @@
+# Sistema-basado-en-Inteligencia-Artificial-para-la-detecci-n-de-enfermedades-en-cultivos
