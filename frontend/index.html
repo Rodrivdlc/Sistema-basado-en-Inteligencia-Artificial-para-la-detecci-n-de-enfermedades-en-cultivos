@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Detección de enfermedades en tomate</title>
+
+    <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+
+    <main class="container">
+
+        <h1>Detección de enfermedades en tomate</h1>
+
+        <p>
+            Sube una fotografía de una hoja de tomate para obtener
+            una predicción.
+        </p>
+
+        <div class="card">
+
+            <input
+                type="file"
+                id="imagen"
+                accept="image/png, image/jpeg, image/webp"
+            >
+
+            <img
+                id="preview"
+                class="preview hidden"
+                alt="Vista previa"
+            >
+
+            <button id="analizar">
+                Analizar imagen
+            </button>
+
+            <div id="resultado" class="resultado hidden">
+
+                <h2>Resultado</h2>
+
+                <p>
+                    <strong>Cultivo:</strong>
+                    <span id="cultivo"></span>
+                </p>
+
+                <p>
+                    <strong>Diagnóstico:</strong>
+                    <span id="enfermedad"></span>
+                </p>
+
+                <p>
+                    <strong>Confianza:</strong>
+                    <span id="confianza"></span>
+                </p>
+
+            </div>
+
+            <p id="error" class="error"></p>
+
+        </div>
+
+    </main>
+
+    <script src="app.js"></script>
+
+</body>
+</html>
