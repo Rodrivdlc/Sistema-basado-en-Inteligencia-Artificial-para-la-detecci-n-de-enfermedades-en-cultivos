@@ -8,12 +8,22 @@ from pathlib import Path
 # Rutas relativas al proyecto
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-MODEL_PATH = BASE_DIR / "models" / "modelo_tomate_mobilenetv2_finetuned.keras"
-CLASSES_PATH = BASE_DIR / "models" / "class_names.json"
+MODEL_PATH = (
+    BASE_DIR
+    / "models"
+    / "modelo_multicultivo_mobilenetv2_finetuned.keras"
+)
+
+CLASSES_PATH = (
+    BASE_DIR
+    / "models"
+    / "class_names_multicultivo.json"
+)
 
 
 # Cargar modelo
 model = keras.models.load_model(MODEL_PATH)
+
 
 # Cargar nombres de clases
 with open(CLASSES_PATH, "r", encoding="utf-8") as f:
@@ -21,29 +31,59 @@ with open(CLASSES_PATH, "r", encoding="utf-8") as f:
 
 
 def predecir_imagen(ruta_imagen):
+    """
+    Recibe la ruta de una imagen y devuelve
+    la clase predicha y la confianza del modelo.
+    """
+
     img = tf.keras.utils.load_img(
         ruta_imagen,
         target_size=(224, 224)
     )
 
     img_array = tf.keras.utils.img_to_array(img)
-    img_array = tf.expand_dims(img_array, axis=0)
 
-    predicciones = model.predict(img_array, verbose=0)
+    # Añadir dimensión batch:
+    # (224, 224, 3) -> (1, 224, 224, 3)
+    img_array = tf.expand_dims(
+        img_array,
+        axis=0
+    )
 
-    indice = int(np.argmax(predicciones[0]))
-    confianza = float(predicciones[0][indice])
+    # Realizar predicción
+    predicciones = model.predict(
+        img_array,
+        verbose=0
+    )
+
+    indice = int(
+        np.argmax(predicciones[0])
+    )
+
+    confianza = float(
+        predicciones[0][indice]
+    )
+
+    clase = class_names[indice]
 
     return {
-        "clase": class_names[indice],
+        "clase": clase,
         "confianza": confianza
     }
 
 
 if __name__ == "__main__":
+
     ruta = BASE_DIR / "pruebas" / "1-29.png"
 
     resultado = predecir_imagen(ruta)
 
-    print("Predicción:", resultado["clase"])
-    print(f"Confianza: {resultado['confianza'] * 100:.2f}%")
+    print(
+        "Predicción:",
+        resultado["clase"]
+    )
+
+    print(
+        f"Confianza: "
+        f"{resultado['confianza'] * 100:.2f}%"
+    )
